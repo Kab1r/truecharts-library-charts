@@ -36,6 +36,12 @@ within the common library.
     {{- end -}}
   {{- end -}}
 
+  {{- if $values.autoLink -}}
+    {{- $defaultServiceName := $ingressName -}}
+    {{- $linkedService := get .Values.service $ingressName -}
+    {{- $defaultServicePort := get $service.ports $ingressName -}}
+  {{- end -}}
+
   {{- if $values.ingressClassName -}}
     {{- $mddwrNamespace = $values.ingressClassName -}}
   {{- end -}}
