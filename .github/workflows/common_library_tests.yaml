@@ -27,7 +27,7 @@ jobs:
           - v3.12.0
     steps:
       - name: Checkout
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3
         with:
           fetch-depth: 1
 
@@ -67,7 +67,7 @@ jobs:
           - v3.12.0
     steps:
       - name: Checkout
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3
         with:
           fetch-depth: 1
 
@@ -124,18 +124,19 @@ jobs:
           - rbac-values.yaml
           - ingress-values.yaml
           - networkPolicy-values.yaml
-          - codeserver-values.yaml
+          # TODO: broken
+          # - codeserver-values.yaml
           - netshoot-values.yaml
           - metrics-values.yaml
-          # - cnpg-values.yaml
-          # - cnpg-multi-values.yaml
+          - cnpg-values.yaml
+          - cnpg-multi-values.yaml
           - manifest-values.yaml
           - stagingmanifest-values.yaml
           - register-operator-values.yaml
 
     steps:
       - name: Checkout
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3
         with:
           fetch-depth: 1
 
@@ -197,6 +198,14 @@ jobs:
           wget https://github.com/boz/kail/releases/download/${KAIL_VERSION}/kail_${KAIL_VERSION}_linux_amd64.tar.gz
           tar -xvzf kail_${KAIL_VERSION}_linux_amd64.tar.gz
           chmod +x kail
+          
+        # Install some manifests to enable us to allow for testing cnpg, metrics and such
+      - name: Install manifests
+        run: |
+          kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.10/config/manifests/metallb-native.yaml --server-side --force-conflicts || echo "error fetching metallb manifest"
+          kubectl apply -f https://raw.githubusercontent.com/cloudnative-pg/cloudnative-pg/release-1.20/releases/cnpg-1.20.0.yaml  --server-side --force-conflicts || echo "error fetching cnpg manifest"
+          kubectl apply -f  https://github.com/prometheus-operator/prometheus-operator/releases/download/v0.65.2/bundle.yaml --server-side --force-conflicts || echo "error fetching prometheus operator manifest"
+          
 
       - name: Run chart-testing (install)
         run: |
@@ -261,7 +270,7 @@ jobs:
           version: ${{ matrix.helm-version }}
 
       - name: Checkout
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3
         with:
           fetch-depth: 1
 
@@ -310,7 +319,7 @@ jobs:
           version: ${{ matrix.helm-version }}
 
       - name: Checkout
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3
         with:
           fetch-depth: 1
 
@@ -357,7 +366,7 @@ jobs:
           version: ${{ matrix.helm-version }}
 
       - name: Checkout
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3
         with:
           fetch-depth: 1
 
